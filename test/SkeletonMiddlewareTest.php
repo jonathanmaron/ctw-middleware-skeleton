@@ -9,7 +9,7 @@ use Middlewares\Utils\Factory;
 
 class SkeletonMiddlewareTest extends AbstractCase
 {
-    public function testSkeletonMiddleware()
+    public function testSkeletonMiddleware(): void
     {
         $this->assertTrue(true);
     }
