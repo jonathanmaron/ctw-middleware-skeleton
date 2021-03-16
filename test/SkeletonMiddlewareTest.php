@@ -28,7 +28,7 @@ class SkeletonMiddlewareTest extends AbstractCase
         $this->assertTrue(true);
     }
 
-    private function getInstance() {
+    private function getInstance(): SkeletonMiddleware {
 
         $container = new ServiceManager();
         //$container->setService('..', $xx);
