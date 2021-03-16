@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace CtwTest\Middleware\SkeletonMiddleware;
 
+use Ctw\Middleware\SkeletonMiddleware\SkeletonMiddleware;
 use Ctw\Middleware\SkeletonMiddleware\SkeletonMiddlewareFactory;
 use Laminas\ServiceManager\ServiceManager;
-use Ctw\Middleware\SkeletonMiddleware\SkeletonMiddleware;
 use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
 
@@ -13,8 +13,7 @@ class SkeletonMiddlewareTest extends AbstractCase
 {
     public function testSkeletonMiddleware(): void
     {
-        $serverParams = [
-        ];
+        $serverParams = [];
         $request      = Factory::createServerRequest('GET', '/', $serverParams);
         $stack        = [
             $this->getInstance(),
@@ -28,12 +27,11 @@ class SkeletonMiddlewareTest extends AbstractCase
         $this->assertTrue(true);
     }
 
-    private function getInstance(): SkeletonMiddleware {
-
+    private function getInstance(): SkeletonMiddleware
+    {
         $container = new ServiceManager();
         //$container->setService('..', $xx);
-
-        $factory = new SkeletonMiddlewareFactory();
+        $factory   = new SkeletonMiddlewareFactory();
 
         return $factory->__invoke($container);
     }
