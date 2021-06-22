@@ -22,9 +22,9 @@ class SkeletonMiddlewareTest extends AbstractCase
 
         // [..]
 
-        // $this->assertEquals('[..]', $actual);
+        // self::assertEquals('[..]', $actual);
 
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 
     private function getInstance(): SkeletonMiddleware
