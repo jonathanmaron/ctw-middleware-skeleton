@@ -11,8 +11,6 @@ class SkeletonMiddleware extends AbstractSkeletonMiddleware
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $response = $handler->handle($request);
-
-        return $response;
+        return $handler->handle($request);
     }
 }
