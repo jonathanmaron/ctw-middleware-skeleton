@@ -16,13 +16,9 @@ class SkeletonMiddlewareTest extends AbstractCase
         $serverParams = [];
         $request      = Factory::createServerRequest('GET', '/', $serverParams);
         $stack        = [$this->getInstance()];
-        Dispatcher::run($stack, $request);
+        $response     = Dispatcher::run($stack, $request);
 
-        // [..]
-
-        // self::assertEquals('[..]', $actual);
-
-        self::assertTrue(true);
+        self::assertEquals(200, $response->getStatusCode());
     }
 
     private function getInstance(): SkeletonMiddleware
