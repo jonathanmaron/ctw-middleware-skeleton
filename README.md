@@ -6,55 +6,138 @@
 [![Scrutinizer Quality](https://scrutinizer-ci.com/g/jonathanmaron/ctw-middleware-skeleton/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jonathanmaron/ctw-middleware-skeleton/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/jonathanmaron/ctw-middleware-skeleton/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jonathanmaron/ctw-middleware-skeleton/?branch=master)
 
-```bash
-$ composer require ctw/ctw-middleware-skeleton
-```
+Skeleton package providing a template structure for creating new PSR-15 middleware packages in the ctw/ctw-middleware-* family.
 
-Intro
+## Introduction
 
-[middlewares/utils](https://packagist.org/packages/middlewares/utils) provides utility classes for working with PSR-15.
+### Why This Library Exists
+
+Creating new middleware packages from scratch involves repetitive boilerplate: directory structure, abstract classes, factories, config providers, PHPUnit configuration, and CI workflows. This skeleton provides a ready-to-use template that ensures consistency across all ctw middleware packages.
+
+The skeleton includes:
+
+- **Standard directory layout**: Organized `src/` and `test/` structure matching other ctw packages
+- **PSR-15 compliant base**: Extends `AbstractMiddleware` from ctw/ctw-middleware
+- **Factory pattern**: Ready-to-use factory for dependency injection containers
+- **ConfigProvider**: Mezzio-compatible configuration provider for service registration
+- **QA tooling**: Pre-configured for ECS, PHPStan, Rector, and PHPUnit
+
+### Problems This Library Solves
+
+1. **Inconsistent structure**: New packages may differ in layout and organization
+2. **Missing boilerplate**: Forgetting essential files like ConfigProvider or factories
+3. **Repeated setup**: Copying and modifying existing packages is error-prone
+4. **QA configuration drift**: Different packages may use different tool configurations
+5. **Learning curve**: New contributors need a reference for package structure
+
+### Where to Use This Library
+
+- **New middleware development**: Clone and rename to start a new middleware package
+- **Reference implementation**: Study the structure when creating custom middleware
+- **Template source**: Copy files as needed for non-ctw PSR-15 middleware projects
+- **Testing base**: Verify your development environment works with a minimal package
+
+### Design Goals
+
+1. **Minimal implementation**: Pass-through middleware with no functionality to modify
+2. **Complete structure**: All required files for a production-ready package
+3. **Consistent patterns**: Matches conventions used across all ctw middleware packages
+4. **Easy customization**: Clear placeholders and naming for search-and-replace
+5. **Ready for CI**: GitHub Actions workflow and QA tools pre-configured
+
+## Requirements
+
+- PHP 8.3 or higher
+- ctw/ctw-middleware ^4.0
 
 ## Installation
 
-Install the middleware using Composer:
+Install by adding the package as a [Composer](https://getcomposer.org) requirement:
 
 ```bash
-$ composer require ctw/ctw-middleware-skeleton
+composer require ctw/ctw-middleware-skeleton
 ```
 
-## Standalone Example
+## Usage Examples
+
+### Creating a New Middleware Package
+
+1. Clone the skeleton repository
+2. Rename files and namespaces from `Skeleton` to your middleware name
+3. Update `composer.json` with your package name and description
+4. Implement your middleware logic in the `process()` method
+
+### Package Structure
+
+```
+ctw-middleware-skeleton/
+├── src/
+│   ├── AbstractSkeletonMiddleware.php
+│   ├── ConfigProvider.php
+│   ├── SkeletonMiddleware.php
+│   └── SkeletonMiddlewareFactory.php
+├── test/
+│   └── ...
+├── composer.json
+├── ecs.php
+├── phpstan.neon
+├── phpunit.xml.dist
+├── rector.php
+└── README.md
+```
+
+### File Purposes
+
+| File | Purpose |
+|------|---------|
+| `AbstractSkeletonMiddleware.php` | Base class for shared functionality |
+| `SkeletonMiddleware.php` | Main middleware implementation |
+| `SkeletonMiddlewareFactory.php` | Creates middleware instances via DI container |
+| `ConfigProvider.php` | Registers services with Mezzio/Laminas |
+
+### Basic Middleware Implementation
+
+The skeleton provides a pass-through implementation:
 
 ```php
-// standalone example
+class SkeletonMiddleware extends AbstractSkeletonMiddleware
+{
+    public function process(
+        ServerRequestInterface $request,
+        RequestHandlerInterface $handler
+    ): ResponseInterface {
+        return $handler->handle($request);
+    }
+}
 ```
 
-## Example in [Mezzio](https://docs.mezzio.dev/)
-
-The middleware has been extensively tested in Mezzio.
-
-After using Composer to install, simply make the following changes to your application's configuration.
-
-In `config/config.php`:
-
-```php
-$providers = [
-    // [..]
-    \Ctw\Middleware\SkeletonMiddleware\ConfigProvider::class,
-    // [..]    
-];
-```
-
-In `config/pipeline.php`:
+### Pipeline Registration (Mezzio)
 
 ```php
 use Ctw\Middleware\SkeletonMiddleware\SkeletonMiddleware;
-use Mezzio\Application;
-use Mezzio\MiddlewareFactory;
-use Psr\Container\ContainerInterface;
 
-return function (Application $app, MiddlewareFactory $factory, ContainerInterface $container): void {
-    // [..]
-    $app->pipe(SkeletonMiddleware::class);
-    // [..]
-};
+// In config/pipeline.php
+$app->pipe(SkeletonMiddleware::class);
 ```
+
+### ConfigProvider Registration
+
+```php
+// config/config.php
+return [
+    // ...
+    \Ctw\Middleware\SkeletonMiddleware\ConfigProvider::class,
+];
+```
+
+### Customization Checklist
+
+When creating a new middleware from this skeleton:
+
+- [ ] Rename namespace from `SkeletonMiddleware` to `YourMiddleware`
+- [ ] Update class names in all files
+- [ ] Modify `composer.json` (name, description, autoload)
+- [ ] Implement middleware logic in `process()` method
+- [ ] Add configuration options if needed (via factory)
+- [ ] Write tests for your implementation
+- [ ] Update README.md with your middleware documentation
