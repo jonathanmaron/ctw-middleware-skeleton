@@ -14,9 +14,9 @@ use Psr\Http\Server\MiddlewareInterface;
 final class SkeletonMiddlewareTest extends AbstractCase
 {
     /**
-     * Test that middleware returns 200 status code
+     * Test that the middleware yields a 200 response when dispatched on a basic GET request.
      */
-    public function testSkeletonMiddleware(): void
+    public function testProcessReturnsSuccessfulResponse(): void
     {
         $serverParams = [];
         $request  = Factory::createServerRequest('GET', '/', $serverParams);
@@ -27,7 +27,7 @@ final class SkeletonMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that middleware implements MiddlewareInterface
+     * Test that the middleware implements MiddlewareInterface when instantiated through the factory.
      */
     public function testMiddlewareImplementsMiddlewareInterface(): void
     {
@@ -38,9 +38,9 @@ final class SkeletonMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that middleware passes request to handler
+     * Test that the middleware delegates to the next request handler in the stack.
      */
-    public function testMiddlewarePassesRequestToHandler(): void
+    public function testProcessDelegatesRequestToNextHandler(): void
     {
         $handlerCalled = false;
         $stack         = [
@@ -64,9 +64,9 @@ final class SkeletonMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that middleware preserves handler response
+     * Test that headers set by a downstream handler are preserved by the middleware.
      */
-    public function testMiddlewarePreservesHandlerResponse(): void
+    public function testProcessPreservesDownstreamResponseHeaders(): void
     {
         $stack = [
             $this->getInstance(),
@@ -90,9 +90,9 @@ final class SkeletonMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that middleware preserves handler response status code
+     * Test that the status code set by a downstream handler is preserved by the middleware.
      */
-    public function testMiddlewarePreservesHandlerResponseStatusCode(): void
+    public function testProcessPreservesDownstreamResponseStatusCode(): void
     {
         $stack = [
             $this->getInstance(),
@@ -115,9 +115,9 @@ final class SkeletonMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that factory creates middleware instance
+     * Test that the factory produces a SkeletonMiddleware instance from the container.
      */
-    public function testFactoryCreatesMiddlewareInstance(): void
+    public function testFactoryCreatesSkeletonMiddlewareInstance(): void
     {
         $container  = new ServiceManager();
         $factory    = new SkeletonMiddlewareFactory();
@@ -128,7 +128,7 @@ final class SkeletonMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test various HTTP methods
+     * Provides representative HTTP methods exercised by the middleware.
      *
      * @return array<string, array{method: string}>
      */
@@ -154,10 +154,10 @@ final class SkeletonMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that middleware works with various HTTP methods
+     * Test that the middleware returns a 200 response regardless of the request HTTP method.
      */
     #[DataProvider('httpMethodProvider')]
-    public function testMiddlewareWorksWithVariousHttpMethods(string $method): void
+    public function testProcessReturnsSuccessForAnyHttpMethod(string $method): void
     {
         $request  = Factory::createServerRequest($method, '/');
         $stack    = [$this->getInstance()];
@@ -167,33 +167,33 @@ final class SkeletonMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test various URI paths
+     * Provides representative URI paths exercised by the middleware.
      *
      * @return array<string, array{path: string}>
      */
     public static function pathProvider(): array
     {
         return [
-            'root path'      => [
+            'root path'   => [
                 'path' => '/',
             ],
-            'simple path'    => [
+            'simple path' => [
                 'path' => '/api',
             ],
-            'nested path'    => [
+            'nested path' => [
                 'path' => '/api/v1/users',
             ],
-            'with query'     => [
+            'with query'  => [
                 'path' => '/search?q=test',
             ],
         ];
     }
 
     /**
-     * Test that middleware works with various paths
+     * Test that the middleware returns a 200 response regardless of the request URI path.
      */
     #[DataProvider('pathProvider')]
-    public function testMiddlewareWorksWithVariousPaths(string $path): void
+    public function testProcessReturnsSuccessForAnyRequestPath(string $path): void
     {
         $request  = Factory::createServerRequest('GET', $path);
         $stack    = [$this->getInstance()];
@@ -203,9 +203,9 @@ final class SkeletonMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that request attributes are preserved
+     * Test that request attributes set before the middleware reach the downstream handler intact.
      */
-    public function testRequestAttributesArePreserved(): void
+    public function testProcessPreservesRequestAttributesForHandler(): void
     {
         $request = Factory::createServerRequest('GET', '/')
             ->withAttribute('test', 'value');
@@ -232,11 +232,11 @@ final class SkeletonMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that multiple middleware instances can be chained
+     * Test that several stacked instances of the middleware still yield a 200 response.
      */
-    public function testMultipleMiddlewareInstancesCanBeChained(): void
+    public function testProcessSucceedsWhenMultipleInstancesAreChained(): void
     {
-        $stack = [$this->getInstance(), $this->getInstance(), $this->getInstance()];
+        $stack    = [$this->getInstance(), $this->getInstance(), $this->getInstance()];
         $response = Dispatcher::run($stack);
 
         self::assertSame(200, $response->getStatusCode());
