@@ -1,10 +1,7 @@
 # Package "ctw/ctw-middleware-skeleton"
 
 [![Latest Stable Version](https://poser.pugx.org/ctw/ctw-middleware-skeleton/v/stable)](https://packagist.org/packages/ctw/ctw-middleware-skeleton)
-[![GitHub Actions](https://github.com/jonathanmaron/ctw-middleware-skeleton/actions/workflows/tests.yml/badge.svg)](https://github.com/jonathanmaron/ctw-middleware-skeleton/actions/workflows/tests.yml)
-[![Scrutinizer Build](https://scrutinizer-ci.com/g/jonathanmaron/ctw-middleware-skeleton/badges/build.png?b=master)](https://scrutinizer-ci.com/g/jonathanmaron/ctw-middleware-skeleton/build-status/master)
-[![Scrutinizer Quality](https://scrutinizer-ci.com/g/jonathanmaron/ctw-middleware-skeleton/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jonathanmaron/ctw-middleware-skeleton/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/jonathanmaron/ctw-middleware-skeleton/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jonathanmaron/ctw-middleware-skeleton/?branch=master)
+[![GitHub Actions](https://github.com/jonathanmaron/ctw-middleware-skeleton/actions/workflows/ci.yml/badge.svg)](https://github.com/jonathanmaron/ctw-middleware-skeleton/actions/workflows/ci.yml)
 
 Skeleton package providing a template structure for creating new PSR-15 middleware packages in the ctw/ctw-middleware-* family.
 
