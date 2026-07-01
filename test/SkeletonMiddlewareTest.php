@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace CtwTest\Middleware\SkeletonMiddleware;
 
+use Ctw\Middleware\SkeletonMiddleware\AbstractSkeletonMiddleware;
 use Ctw\Middleware\SkeletonMiddleware\SkeletonMiddleware;
 use Ctw\Middleware\SkeletonMiddleware\SkeletonMiddlewareFactory;
 use Laminas\ServiceManager\ServiceManager;
@@ -35,6 +36,17 @@ final class SkeletonMiddlewareTest extends AbstractCase
 
         // @phpstan-ignore-next-line
         self::assertInstanceOf(MiddlewareInterface::class, $middleware);
+    }
+
+    /**
+     * Test that the middleware extends the AbstractSkeletonMiddleware base class when instantiated.
+     */
+    public function testMiddlewareExtendsAbstractSkeletonMiddleware(): void
+    {
+        $middleware = $this->getInstance();
+
+        // @phpstan-ignore-next-line
+        self::assertInstanceOf(AbstractSkeletonMiddleware::class, $middleware);
     }
 
     /**
