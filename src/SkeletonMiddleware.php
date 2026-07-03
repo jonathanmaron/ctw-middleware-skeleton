@@ -9,6 +9,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class SkeletonMiddleware extends AbstractSkeletonMiddleware
 {
+    #[\Override]
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         return $handler->handle($request);
